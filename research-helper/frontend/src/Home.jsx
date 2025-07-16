@@ -17,6 +17,8 @@ function Home() {
   const [userMajor, setUserMajor] = useState("");
   const [userSchool, setUserSchool] = useState("");
   const [facultyEmails, setFacultyEmails] = useState([]);
+  const [emailOffset, setEmailOffset] = useState(0);
+  const [hasMoreEmails, setHasMoreEmails] = useState(true);
 
   useEffect(() => {
     const currentWord = words[wordIndex];
@@ -44,27 +46,50 @@ function Home() {
     return () => clearTimeout(timeout);
   }, [charIndex, isDeleting, wordIndex]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  // Helper to fetch emails with offset
+  const fetchEmails = async (school, offset) => {
     try {
       const response = await fetch("http://localhost:5050/get-emails", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ school: userSchool }),
+        body: JSON.stringify({ school, offset }),
       });
 
       const data = await response.json();
-
-      if (data.emails) {
-        setFacultyEmails(data.emails);
-      } else {
-        setFacultyEmails(["No results found."]);
-      }
+      return data.emails || [];
     } catch (error) {
       console.error("Fetch failed:", error);
-      setFacultyEmails(["Server error. Please try again later."]);
+      return null;
     }
+  };
+
+  // Submit initial request, reset offset & emails
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!userSchool) return;
+
+    const emails = await fetchEmails(userSchool, 0);
+    if (emails === null) {
+      setFacultyEmails(["Server error. Please try again later."]);
+      setHasMoreEmails(false);
+    } else {
+      setFacultyEmails(emails);
+      setEmailOffset(emails.length);
+      setHasMoreEmails(emails.length === 3); // if less than 3, no more emails
+    }
+  };
+
+  // Load more emails on button click
+  const handleLoadMore = async () => {
+    const moreEmails = await fetchEmails(userSchool, emailOffset);
+    if (moreEmails === null) {
+      setFacultyEmails((prev) => [...prev, "Server error. Please try again later."]);
+      setHasMoreEmails(false);
+      return;
+    }
+    setFacultyEmails((prev) => [...prev, ...moreEmails]);
+    setEmailOffset((prev) => prev + moreEmails.length);
+    if (moreEmails.length < 3) setHasMoreEmails(false);
   };
 
   return (
@@ -136,6 +161,11 @@ function Home() {
                 <li key={index}>{email}</li>
               ))}
             </ul>
+            {hasMoreEmails && (
+              <button onClick={handleLoadMore} style={{ marginTop: "1rem", padding: "0.5rem 1rem" }}>
+                Load More
+              </button>
+            )}
           </div>
         )}
       </div>
