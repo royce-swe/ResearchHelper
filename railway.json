@@ -1,7 +1,8 @@
 {
-    "build": {
-      "builder": "NIXPACKS",
-      "startCommand": "gunicorn backend:app --bind 0.0.0.0:$PORT"
-    }
+  "build": {
+    "rootDir": "research-helper/backend"
+  },
+  "start": {
+    "cmd": "gunicorn backend:app"
   }
-  
+}
