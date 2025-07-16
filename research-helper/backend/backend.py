@@ -7,11 +7,12 @@ import pandas as pd
 app = Flask(__name__)
 
 # CORS: allow React dev server (change if your port/origin differs)
+
 CORS(
     app,
-    resources={r"/get-emails": {"origins": "*"}},
+    resources={r"/get-emails": {"origins": ["https://research-helper.vercel.app", "http://localhost:5173"]}},
     supports_credentials=True,
-    methods=["POST", "OPTIONS"],
+    methods=["POST", "OPTIONS"]
 )
 
 # ---------- Load CSVs once at startup ----------
