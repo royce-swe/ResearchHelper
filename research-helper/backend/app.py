@@ -5,6 +5,7 @@ from flask_cors import CORS
 import pandas as pd
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False  
 
 # CORS: allow React dev server (change if your port/origin differs)
 CORS(app, resources={r"/get-emails": {"origins": "*"}}, methods=["GET", "POST", "OPTIONS"], allow_headers="*")
@@ -52,6 +53,11 @@ def get_emails():
 
     emails = df["email"].head(3).dropna().tolist()
     return jsonify({"emails": emails})
+
+@app.route("/", methods=["GET"])
+def root():
+    return "Backend is alive!"
+
 
 if __name__ == "__main__":
     import os
