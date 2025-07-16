@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 CORS(
     app,
-    resources={r"/get-emails": {"origins": ["https://research-helper.vercel.app/"]}},
+    resources={r"/get-emails": {"origins": ["https://research-helper.vercel.app"]}},
     methods=["GET", "POST", "OPTIONS"],
     allow_headers="*"
 )
@@ -58,5 +58,7 @@ def get_emails():
     return jsonify({"emails": emails})
 
 if __name__ == "__main__":
-    # Turn off threaded reloader to avoid duplicate log lines
-    app.run(debug=True, host="0.0.0.0", port=5050, use_reloader=False)
+    import os
+    port = int(os.environ.get("PORT", 5050))  # use PORT from env (e.g., 8080), fallback to 5050 for local
+    app.run(debug=True, host="0.0.0.0", port=port, use_reloader=False)
+
