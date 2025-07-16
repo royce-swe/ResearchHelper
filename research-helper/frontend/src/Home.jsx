@@ -49,7 +49,7 @@ function Home() {
   // Helper to fetch emails with offset
   const fetchEmails = async (school, offset) => {
     try {
-      const response = await fetch("http://localhost:5050/get-emails", {
+      const response = await fetch("https://researchhelper-production.up.railway.app/get-emails", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ school, offset }),

@@ -9,9 +9,9 @@ app = Flask(__name__)
 # CORS: allow React dev server (change if your port/origin differs)
 CORS(
     app,
-    resources={r"/get-emails": {"origins": "http://localhost:5173"}},
-    supports_credentials=True,          # not strictly needed here, but harmless
-    methods=["POST", "OPTIONS"],        # allow JSON POST and pre‑flight
+    resources={r"/get-emails": {"origins": "*"}},
+    supports_credentials=True,
+    methods=["POST", "OPTIONS"],
 )
 
 # ---------- Load CSVs once at startup ----------
