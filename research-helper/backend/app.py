@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False  
 
 # CORS: allow React dev server (change if your port/origin differs)
-CORS(app, resources={r"/get-emails": {"origins": "*"}}, methods=["GET", "POST", "OPTIONS"], allow_headers="*")
+CORS(app)
 
 
 # ---------- Load CSVs once at startup ----------
@@ -25,13 +25,11 @@ for key in data:
     data[key].columns = [col.lower() for col in data[key].columns]
 # ------------------------------------------------
 
-@app.route("/get-emails",  methods=["POST", "OPTIONS"])
-@app.route("/get-emails/", methods=["POST", "OPTIONS"])
+@app.route("/get-emails/",  methods=["POST", "OPTIONS"])
+@app.route("/get-emails", methods=["POST", "OPTIONS"])
 def get_emails():
-    """
-    Accepts JSON  {"school": "<free‑text>"}  and returns
-    {"emails": ["a@x", "b@x", "c@x"]}  (first three rows of 'email' column).
-    """
+    if request.method == "OPTIONS":
+        return '', 200  # respond OK to preflight
     payload = request.get_json(silent=True) or {}
     user_input = payload.get("school", "").lower()
 
