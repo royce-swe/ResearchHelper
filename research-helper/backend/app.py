@@ -24,7 +24,8 @@ for key in data:
     data[key].columns = [col.lower() for col in data[key].columns]
 # ------------------------------------------------
 
-@app.route("/get-emails", methods=["POST", "OPTIONS"])
+@app.route("/get-emails",  methods=["POST", "OPTIONS"])
+@app.route("/get-emails/", methods=["POST", "OPTIONS"])
 def get_emails():
     """
     Accepts JSON  {"school": "<free‑text>"}  and returns
