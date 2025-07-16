@@ -3,6 +3,6 @@
     "rootDir": "research-helper/backend"
   },
   "start": {
-    "cmd": "gunicorn backend:app"
+    "cmd": "gunicorn backend:app --bind 0.0.0.0:$PORT"
   }
 }
