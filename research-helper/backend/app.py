@@ -7,13 +7,8 @@ import pandas as pd
 app = Flask(__name__)
 
 # CORS: allow React dev server (change if your port/origin differs)
+CORS(app, resources={r"/get-emails": {"origins": "*"}}, methods=["GET", "POST", "OPTIONS"], allow_headers="*")
 
-CORS(
-    app,
-    resources={r"/get-emails": {"origins": ["https://research-helper.vercel.app"]}},
-    methods=["GET", "POST", "OPTIONS"],
-    allow_headers="*"
-)
 
 # ---------- Load CSVs once at startup ----------
 BASE = Path(__file__).resolve().parent  # folder where backend.py lives
@@ -29,7 +24,7 @@ for key in data:
     data[key].columns = [col.lower() for col in data[key].columns]
 # ------------------------------------------------
 
-@app.route("/get-emails", methods=["POST"])
+@app.route("/get-emails", methods=["POST", "OPTIONS"])
 def get_emails():
     """
     Accepts JSON  {"school": "<free‑text>"}  and returns
