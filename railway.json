@@ -1,8 +1,8 @@
 {
     "build": {
       "builder": "NIXPACKS",
-      "buildCommand": "cd research-helper/backend && pip install -r requirements.txt",
-      "startCommand": "cd research-helper/backend && gunicorn backend:app --bind 0.0.0.0:$PORT"
+      "buildCommand": "pip install -r requirements.txt",
+      "startCommand": "gunicorn backend:app --bind 0.0.0.0:$PORT"
     }
   }
   
