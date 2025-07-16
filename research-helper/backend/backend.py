@@ -8,12 +8,8 @@ app = Flask(__name__)
 
 # CORS: allow React dev server (change if your port/origin differs)
 
-CORS(
-    app,
-    resources={r"/get-emails": {"origins": ["https://research-helper.vercel.app", "http://localhost:5173"]}},
-    supports_credentials=True,
-    methods=["POST", "OPTIONS"]
-)
+CORS(app, resources={r"/get-emails": {"origins": "*"}})
+
 
 # ---------- Load CSVs once at startup ----------
 BASE = Path(__file__).resolve().parent  # folder where backend.py lives
