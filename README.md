@@ -6,7 +6,6 @@ A web application that allows users to input their intended field of study and s
 
 ## Features
 
-- Animated typing effect for the word "Research" with rotating descriptors.
 - Input form to enter intended field of study.
 - Dropdown menu to select a university.
 - Fetches and displays the top 3 faculty emails from the selected university.
